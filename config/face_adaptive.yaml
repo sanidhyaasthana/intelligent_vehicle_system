@@ -1,0 +1,107 @@
+# Face Recognition Adaptive Configuration
+# Adaptive-margin ArcFace with quality-aware margins
+
+experiment:
+  name: "face_adaptive"
+  description: "Adaptive-margin face verification with quality-aware margins"
+  seed: 21
+
+model:
+  backbone: "resnet50"  # Options: resnet50, mobilefacenet
+  embedding_dim: 512
+  num_classes: 1680  # LFW dataset has 1680 unique identities
+  pretrained: true
+
+arcface:
+  scale: 64.0
+  margin: 0.5  # Reference margin (not used directly in adaptive mode)
+  adaptive: true
+  margin_min: 0.35  # Minimum margin for high-quality images
+  margin_max: 0.65  # Maximum margin for low-quality images
+  quality_weight: 1.0  # How strongly quality affects margin
+
+# Data paths used by build_face_dataloader
+data:
+  face_data_dir: "data/face"
+  face_label_file: "data/face/labels.txt"
+  image_size: 112
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  add_quality_degradation: true
+  degradation_types: ["blur", "brightness"]
+
+dataset:
+  image_size: 112
+  num_workers: 0
+
+  # Augmentation settings
+  augmentation:
+    enabled: true
+    horizontal_flip: true
+    color_jitter: true
+
+  # Synthetic degradation (enabled for robustness)
+  degradation:
+    enabled: true
+    low_light_prob: 0.2
+    low_light_factor_range: [0.3, 0.7]
+    blur_prob: 0.15
+    blur_kernel_range: [3, 7]
+    occlusion_prob: 0.1
+    occlusion_size_range: [0.1, 0.3]
+
+quality:
+  # Quality estimation method
+  method: "combined"  # Options: laplacian, brightness, contrast, combined
+  # Normalization parameters
+  laplacian_threshold: 100.0
+  brightness_range: [50, 200]
+  contrast_threshold: 50.0
+  # Quality logging
+  log_distribution: true
+  log_interval: 500
+
+training:
+  batch_size: 32
+  epochs: 50
+  num_workers: 0
+  optimizer: "sgd"
+  learning_rate: 0.001
+  momentum: 0.9
+  weight_decay: 0.0005
+  gradient_clip: 20.0
+
+  scheduler:
+    type: "cosine"
+    T_max: 50
+    eta_min: 0.0001
+
+  early_stopping:
+    enabled: true
+    patience: 15
+    monitor: "val_eer"
+    mode: "min"
+
+  # Margin distribution logging
+  margin_logging:
+    enabled: true
+    log_interval: 100
+    save_histograms: true
+
+evaluation:
+  verification_pairs: 6000
+  thresholds: 100
+  quality_stratified: true  # Evaluate separately by quality bins
+
+logging:
+  log_interval: 100
+  save_best_only: true
+  tensorboard: false
+  wandb: false
+
+results:
+  dir: "results/face/adaptive"
+  save_embeddings: true
+  save_roc_data: true
+  save_quality_analysis: true

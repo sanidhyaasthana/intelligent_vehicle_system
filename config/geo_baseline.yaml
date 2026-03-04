@@ -1,0 +1,93 @@
+# Geofence Baseline Configuration
+# Hard boundary geofence model
+
+experiment:
+  name: "geo_baseline"
+  description: "Baseline geofence with hard polygon boundaries"
+  seed: 21
+
+model:
+  type: "hard"
+
+  # Hard geofence settings
+  geofences:
+    - name: "home"
+      type: "circle"
+      center: [40.7128, -74.0060]  # lat, lon
+      radius: 50  # meters
+    - name: "office"
+      type: "circle"
+      center: [40.7580, -73.9855]
+      radius: 100
+    - name: "parking"
+      type: "polygon"
+      vertices:
+        - [40.7500, -73.9900]
+        - [40.7510, -73.9900]
+        - [40.7510, -73.9890]
+        - [40.7500, -73.9890]
+
+data:
+  geo_data_file: "data/geo/location_data.csv"
+  home_lat: 40.7128
+  home_lon: -74.0060
+  boundary_distance: 100.0
+  geofences:
+    - name: "home"
+      lat: 40.7128
+      lon: -74.0060
+      radius: 50
+    - name: "office"
+      lat: 40.7580
+      lon: -73.9855
+      radius: 100
+    - name: "parking"
+      lat: 40.7505
+      lon: -73.9895
+      radius: 40
+
+dataset:
+  # Feature configuration
+  features:
+    - "lat"
+    - "lon"
+    - "distance_to_home"
+    - "distance_to_nearest_geofence"
+    - "time_of_day_sin"
+    - "time_of_day_cos"
+    - "gps_accuracy"
+    - "speed"
+    - "is_boundary_region"
+
+simulation:
+  enabled: true
+  num_train_samples: 10000
+  num_val_samples: 2000
+  num_test_samples: 2000
+
+  legitimate:
+    inside_ratio: 0.8  # 80% inside geofences
+    noise_std: 10  # meters
+    time_distribution: "normal"  # morning/evening peaks
+
+  attack:
+    outside_ratio: 0.6
+    boundary_ratio: 0.3
+    unusual_time_ratio: 0.1
+    distance_range: [100, 5000]  # meters from nearest geofence
+
+training:
+  # Not applicable for hard geofence (rule-based)
+  enabled: false
+  num_workers: 0
+
+evaluation:
+  boundary_margin: 20  # meters - region considered "boundary"
+
+logging:
+  log_interval: 100
+  save_decisions: true
+
+results:
+  dir: "results/geo/baseline"
+  save_confusion_matrix: true

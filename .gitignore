@@ -1,0 +1,31 @@
+# Python virtual environments
+venv/
+.venv/
+.venv_eval/
+
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# VSCode
+.vscode/
+
+
+# Build files
+dist/
+build/
+*.egg-info/

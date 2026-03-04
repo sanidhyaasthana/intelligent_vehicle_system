@@ -1,0 +1,46 @@
+# Full Fusion Runtime Config
+# Used by: python run_full_fusion.py --config config/full_fusion_runtime.yaml
+# Dataset: Real images with GPS coordinates (data/system_events/system_events.csv)
+# Pipeline: Loads images, runs ResNet-50 backbone inference, computes T_face/T_geo from scratch
+
+experiment:
+  name: "fusion_full_system_runtime"
+  description: "Paper-faithful runtime evaluation with real backbone inference"
+  seed: 42
+
+# Canonical dataset path — the ONLY place the path is defined
+data:
+  system_events_path: "data/system_events/system_events.csv"
+  enrollment_db: "data/enrollment_embeddings.parquet"
+  dataset_name: "lfw"
+
+# Face component configuration
+face:
+  backbone: "resnet50"
+  embedding_dim: 512
+
+# Fusion weights (score-level: T_final = w_face * T_face + w_geo * T_geo)
+fusion:
+  rule_based:
+    alpha: 0.6
+    beta: 0.4
+
+# Geofence parameters for Gaussian CDF trust
+geofence:
+  radius: 50.0
+  sigma: 10.0
+
+# Face trust parameters: T_face = sigmoid((cos_sim - m_eff) / tau)
+face_trust:
+  m_base: 0.5
+  alpha: 0.3
+  tau: 0.07
+
+# Image preprocessing
+image:
+  size: 112
+
+device: "cpu"
+
+results:
+  dir: "results/fusion_full_system"

@@ -1,0 +1,38 @@
+======================================================================
+EVALUATION REPORT
+Risk-Aware Vehicle Authorization Framework
+======================================================================
+
+Seeds evaluated: [7, 21, 42]
+Number of seeds: 3
+
+SYSTEM COMPARISON (same dataset, same test pairs, same metrics):
+----------------------------------------------------------------------
+  Model                                       AUC                EER       TAR@FAR=0.01
+----------------------------------------------------------------------
+  Face (Baseline)               0.7866 +/- 0.0428  0.3019 +/- 0.0269      NOT SUPPORTED
+  Geo (Baseline)                0.8588 +/- 0.0481  0.2153 +/- 0.0467      NOT SUPPORTED
+  Proposed (Fusion)             0.9458 +/- 0.0034  0.1496 +/- 0.0080      NOT SUPPORTED
+----------------------------------------------------------------------
+
+PROPOSED FUSION — FULL METRICS (mean +/- std across seeds):
+--------------------------------------------------
+  roc_auc                  : 0.9458 +/- 0.0034
+  eer                      : 0.1496 +/- 0.0080
+  tar_at_far_001           : NOT SUPPORTED
+  tar_at_far_0001          : NOT SUPPORTED
+  accuracy                 : 0.8510 +/- 0.0082
+  precision                : 0.9213 +/- 0.0019
+  recall                   : 0.8521 +/- 0.0093
+  f1                       : 0.8854 +/- 0.0056
+  far                      : 0.1514 +/- 0.0085
+  frr                      : 0.1479 +/- 0.0093
+  latency_mean_ms          : 0.0024 +/- 0.0004
+
+--------------------------------------------------
+
+All three models evaluated on identical test splits.
+No synthetic metrics were generated.
+No random numbers were used in metric computation.
+All formulas follow biometric evaluation standards (sklearn roc_curve + auc).
+======================================================================

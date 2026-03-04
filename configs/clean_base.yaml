@@ -1,0 +1,23 @@
+data:
+  enrollment_db: data/enrollment_embeddings.parquet
+  system_events_path: data/system_events/system_events.csv
+
+device: cpu
+backbone: resnet50
+embedding_dim: 512
+image_size: 112
+
+w_face: 0.6
+w_geo: 0.4
+
+geo_radius: 50.0
+geo_sigma: 10.0
+
+m_base: 0.5
+alpha: 0.3
+tau: 0.07
+
+results_dir: results/fusion_full_system
+experiment_name: fusion_full_system
+
+seed: 42

@@ -1,0 +1,122 @@
+{
+  "label_convention": "1=genuine, 0=impostor",
+  "score_convention": "higher=more_genuine (trust scores)",
+  "evaluation_protocol": "subject_disjoint, cross_identity_impostors",
+  "num_impostors": 121946,
+  "min_measurable_far": 8.200350975021731e-06,
+  "far_supported": true,
+  "fusion": {
+    "roc_auc": {
+      "mean": 0.875615,
+      "std": 0.014024
+    },
+    "eer": {
+      "mean": 0.212989,
+      "std": 0.012218
+    },
+    "tar_at_far_1e-2": {
+      "mean": 0.09429,
+      "std": 0.045792
+    },
+    "accuracy": {
+      "mean": 0.896876,
+      "std": 0.016358
+    },
+    "precision": {
+      "mean": 1.0,
+      "std": 0.0
+    },
+    "recall": {
+      "mean": 0.792613,
+      "std": 0.025287
+    },
+    "f1": {
+      "mean": 0.88409,
+      "std": 0.01562
+    },
+    "far": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "frr": {
+      "mean": 0.207387,
+      "std": 0.025287
+    }
+  },
+  "face_only": {
+    "roc_auc": {
+      "mean": 0.499585,
+      "std": 0.00967
+    },
+    "eer": {
+      "mean": 0.500208,
+      "std": 0.012265
+    },
+    "tar_at_far_1e-2": {
+      "mean": 0.035704,
+      "std": 0.01019
+    },
+    "accuracy": {
+      "mean": 0.515276,
+      "std": 0.006778
+    },
+    "precision": {
+      "mean": 0.510807,
+      "std": 0.020128
+    },
+    "recall": {
+      "mean": 0.493729,
+      "std": 0.014034
+    },
+    "f1": {
+      "mean": 0.501776,
+      "std": 0.011406
+    },
+    "far": {
+      "mean": 0.463978,
+      "std": 0.026984
+    },
+    "frr": {
+      "mean": 0.506271,
+      "std": 0.014034
+    }
+  },
+  "geo_only": {
+    "roc_auc": {
+      "mean": 0.886672,
+      "std": 0.008573
+    },
+    "eer": {
+      "mean": 0.197014,
+      "std": 0.011408
+    },
+    "tar_at_far_1e-2": {
+      "mean": 0.12204,
+      "std": 0.022426
+    },
+    "accuracy": {
+      "mean": 0.922811,
+      "std": 0.016111
+    },
+    "precision": {
+      "mean": 1.0,
+      "std": 0.0
+    },
+    "recall": {
+      "mean": 0.845112,
+      "std": 0.025879
+    },
+    "f1": {
+      "mean": 0.915841,
+      "std": 0.015281
+    },
+    "far": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "frr": {
+      "mean": 0.154888,
+      "std": 0.025879
+    }
+  }
+}

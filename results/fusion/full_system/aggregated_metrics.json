@@ -1,0 +1,173 @@
+{
+  "fusion": {
+    "roc_auc": {
+      "mean": 0.9458234104721578,
+      "std": 0.003358886924026546,
+      "supported": true
+    },
+    "eer": {
+      "mean": 0.14962874312914462,
+      "std": 0.008031946500685514,
+      "supported": true
+    },
+    "tar_at_far_001": {
+      "mean": null,
+      "std": null,
+      "supported": false
+    },
+    "tar_at_far_0001": {
+      "mean": null,
+      "std": null,
+      "supported": false
+    },
+    "accuracy": {
+      "mean": 0.850991102879176,
+      "std": 0.008248973414777289,
+      "supported": true
+    },
+    "precision": {
+      "mean": 0.9213472039053044,
+      "std": 0.001857118362555764,
+      "supported": true
+    },
+    "recall": {
+      "mean": 0.852117489681724,
+      "std": 0.009295068147209717,
+      "supported": true
+    },
+    "f1": {
+      "mean": 0.8853601347193365,
+      "std": 0.005601095636150394,
+      "supported": true
+    },
+    "far": {
+      "mean": 0.15137497594001323,
+      "std": 0.008540980577459667,
+      "supported": true
+    },
+    "frr": {
+      "mean": 0.147882510318276,
+      "std": 0.00929506814720969,
+      "supported": true
+    },
+    "latency_mean_ms": {
+      "mean": 0.0023842511476897745,
+      "std": 0.00036828677553274496,
+      "supported": true
+    }
+  },
+  "face_only": {
+    "roc_auc": {
+      "mean": 0.7865504961123105,
+      "std": 0.042791317788183535,
+      "supported": true
+    },
+    "eer": {
+      "mean": 0.3018517473712035,
+      "std": 0.026890422185703436,
+      "supported": true
+    },
+    "tar_at_far_001": {
+      "mean": null,
+      "std": null,
+      "supported": false
+    },
+    "tar_at_far_0001": {
+      "mean": null,
+      "std": null,
+      "supported": false
+    },
+    "accuracy": {
+      "mean": 0.7001547520159429,
+      "std": 0.02957906337027911,
+      "supported": true
+    },
+    "precision": {
+      "mean": 0.8254904048435643,
+      "std": 0.020959184739020257,
+      "supported": true
+    },
+    "recall": {
+      "mean": 0.7034755868774368,
+      "std": 0.0345289903405784,
+      "supported": true
+    },
+    "f1": {
+      "mean": 0.7595092541683114,
+      "std": 0.028984144313222073,
+      "supported": true
+    },
+    "far": {
+      "mean": 0.30717908161984386,
+      "std": 0.019774859922224584,
+      "supported": true
+    },
+    "frr": {
+      "mean": 0.29652441312256317,
+      "std": 0.03452899034057835,
+      "supported": true
+    },
+    "latency_mean_ms": {
+      "mean": 0.0021788737439379846,
+      "std": 0.000279256087879272,
+      "supported": true
+    }
+  },
+  "geo_only": {
+    "roc_auc": {
+      "mean": 0.8587901657836715,
+      "std": 0.04810686680796809,
+      "supported": true
+    },
+    "eer": {
+      "mean": 0.21525515065749276,
+      "std": 0.046664277876309494,
+      "supported": true
+    },
+    "tar_at_far_001": {
+      "mean": null,
+      "std": null,
+      "supported": false
+    },
+    "tar_at_far_0001": {
+      "mean": null,
+      "std": null,
+      "supported": false
+    },
+    "accuracy": {
+      "mean": 0.7815220537304018,
+      "std": 0.04690753570216997,
+      "supported": true
+    },
+    "precision": {
+      "mean": 0.886699213577911,
+      "std": 0.025219688025395644,
+      "supported": true
+    },
+    "recall": {
+      "mean": 0.7755289645834353,
+      "std": 0.046971788463689386,
+      "supported": true
+    },
+    "f1": {
+      "mean": 0.8271710170715725,
+      "std": 0.03759110591378183,
+      "supported": true
+    },
+    "far": {
+      "mean": 0.20603926589842084,
+      "std": 0.04702371440182033,
+      "supported": true
+    },
+    "frr": {
+      "mean": 0.22447103541656468,
+      "std": 0.04697178846368937,
+      "supported": true
+    },
+    "latency_mean_ms": {
+      "mean": 0.003262673613417918,
+      "std": 0.0007615459829514288,
+      "supported": true
+    }
+  }
+}

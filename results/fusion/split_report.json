@@ -1,0 +1,64 @@
+{
+  "protocol": "subject_disjoint",
+  "seeds": [
+    7,
+    21,
+    42
+  ],
+  "split_ratio": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "identity_leakage": false,
+  "per_seed": [
+    {
+      "seed": 7,
+      "total_identities": 1219,
+      "train_identities": 853,
+      "val_identities": 182,
+      "test_identities": 184,
+      "train_samples": 2896,
+      "val_samples": 517,
+      "test_samples": 587,
+      "train_genuine": 1441,
+      "train_impostor": 1455,
+      "test_genuine": 289,
+      "test_impostor": 298,
+      "identity_leakage": false,
+      "split_type": "subject_disjoint"
+    },
+    {
+      "seed": 21,
+      "total_identities": 1219,
+      "train_identities": 853,
+      "val_identities": 182,
+      "test_identities": 184,
+      "train_samples": 2610,
+      "val_samples": 603,
+      "test_samples": 787,
+      "train_genuine": 1322,
+      "train_impostor": 1288,
+      "test_genuine": 371,
+      "test_impostor": 416,
+      "identity_leakage": false,
+      "split_type": "subject_disjoint"
+    },
+    {
+      "seed": 42,
+      "total_identities": 1219,
+      "train_identities": 853,
+      "val_identities": 182,
+      "test_identities": 184,
+      "train_samples": 2831,
+      "val_samples": 672,
+      "test_samples": 497,
+      "train_genuine": 1398,
+      "train_impostor": 1433,
+      "test_genuine": 259,
+      "test_impostor": 238,
+      "identity_leakage": false,
+      "split_type": "subject_disjoint"
+    }
+  ]
+}

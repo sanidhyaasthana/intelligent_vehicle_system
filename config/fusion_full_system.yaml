@@ -1,0 +1,213 @@
+# Full System Fusion Configuration
+# Risk-aware fusion of face verification and geofence trust
+
+experiment:
+  name: "fusion_full_system"
+  description: "Complete risk-aware vehicle authorization with adaptive face and probabilistic geofence"
+  seed: 21
+
+# Face component configuration
+face:
+  # Dynamic multi-seed model loading (PREFERRED)
+  model_dir: "results/face/adaptive"
+  model_name: "best_model.pt"  # Checkpoint filename within seed directories
+  
+  # Legacy single-model path (deprecated - use model_dir instead)
+  # model_path: "results/face/adaptive/best_model.pt"
+  
+  backbone: "resnet50"
+  embedding_dim: 512
+  adaptive_margin: true
+  quality_estimation: true
+
+# Geofence component configuration
+geofence:
+  # Dynamic multi-seed model loading (PREFERRED)
+  model_dir: "results/geo/probabilistic"
+  model_name: "geo_model.pt"
+  
+  # Legacy single-model path (deprecated - use model_dir instead)
+  # model_path: "results/geo/probabilistic/best_model.pt"
+  
+  model_type: "probabilistic"
+  architecture: "mlp"
+
+# Fusion model configuration
+fusion:
+  mode: "learned"  # Options: rule_based, learned
+  
+  # Dynamic multi-seed model loading (PREFERRED)
+  model_dir: "results/fusion/fusion_training"
+  model_name: "fusion_model.pt"
+  
+  # Legacy single-model path (deprecated - use model_dir instead)
+  # model_path: "results/fusion/models/fusion_model.pt"
+
+  # Rule-based fusion parameters
+  rule_based:
+    alpha: 0.6  # Weight for face component (1 - T_face)
+    beta: 0.4   # Weight for geo component (1 - T_geo)
+    tau1: 0.3   # Threshold for ALLOW
+    tau2: 0.7   # Threshold for BLOCK (WARN in between)
+
+    # Grid search for optimal parameters
+    tune:
+      enabled: true
+      alpha_range: [0.4, 0.8]
+      beta_range: [0.2, 0.6]
+      tau1_range: [0.2, 0.5]
+      tau2_range: [0.5, 0.8]
+      steps: 10
+
+  # Learned fusion parameters
+  learned:
+    architecture: "mlp"  # Options: logistic, mlp
+    hidden_dims: [32, 16]
+    dropout: 0.1
+    input_features:
+      - "T_face"
+      - "T_geo"
+      - "face_quality"
+      - "gps_accuracy"
+      - "time_of_day_sin"
+      - "time_of_day_cos"
+      - "speed"
+
+# Context features for enhanced fusion
+context:
+  use_time: true
+  use_speed: true
+  use_gps_accuracy: true
+  use_face_quality: true
+  use_historical: false  # Future extension for temporal patterns
+
+# Canonical dataset path
+data:
+  system_events_path: "data/geo/system_events.csv"
+
+dataset:
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+
+training:
+  batch_size: 128
+  epochs: 50
+  optimizer: "adam"
+  learning_rate: 0.001
+  weight_decay: 0.0001
+
+  loss: "bce"
+  class_weights: [1.0, 2.0]  # Higher weight for attacks
+
+  scheduler:
+    type: "cosine"
+    T_max: 50
+    eta_min: 0.0001
+
+  early_stopping:
+    enabled: true
+    patience: 15
+    monitor: "val_f1"
+    mode: "max"
+
+evaluation:
+  # Multi-seed reproducibility evaluation
+  # CRITICAL: Each seed produces independent model checkpoints
+  seeds: [7, 21, 42]
+  
+  # System-level metrics (computed from real predictions only)
+  metrics:
+    - "accuracy"
+    - "far"
+    - "frr"
+    - "eer"
+    - "auc"
+    - "f1"
+    - "tar_at_far_001"
+    - "tar_at_far_01"
+
+  # Attack scenarios to evaluate
+  attack_scenarios:
+    - "correct_face_wrong_geo"
+    - "wrong_face_correct_geo"
+    - "both_wrong"
+    - "low_quality_images"
+    - "boundary_attacks"
+    - "unusual_time"
+
+  # Comparison configurations
+  compare_configurations:
+    - name: "baseline"
+      face_type: "fixed_margin"
+      geo_type: "hard"
+      fusion_type: "and_rule"
+    - name: "adaptive_face_only"
+      face_type: "adaptive_margin"
+      geo_type: "hard"
+      fusion_type: "and_rule"
+    - name: "prob_geo_only"
+      face_type: "fixed_margin"
+      geo_type: "probabilistic"
+      fusion_type: "rule_based"
+    - name: "full_system"
+      face_type: "adaptive_margin"
+      geo_type: "probabilistic"
+      fusion_type: "learned"
+
+  # EER (Equal Error Rate) calculation from real predictions
+  eer:
+    enabled: true
+    thresholds: 1000
+    method: "threshold_sweep"
+  
+  # DET curve for publication
+  det_curve:
+    enabled: true
+    log_scale: true
+  
+  # ROC curve with multi-seed overlay
+  roc_curve:
+    enabled: true
+    multi_seed_overlay: true
+
+  # Real latency measurement
+  latency:
+    enabled: true
+    measure_components: true  # Face, Geo, Fusion separately
+    num_samples: 500
+
+  # Confusion matrices
+  confusion_matrix:
+    enabled: true
+    normalized: true
+
+  # Data integrity checks
+  data_integrity:
+    check_test_isolation: true
+    check_no_leakage: true
+
+logging:
+  log_interval: 50
+  log_trust_distributions: true
+  log_risk_distributions: true
+  log_decision_breakdown: true
+  tensorboard: false
+  wandb: false
+
+results:
+  dir: "results/fusion/full_system"
+  save_comparison_table: true
+  save_roc_curves: true
+  save_confusion_matrices: true
+  save_latency_report: true
+  save_attack_analysis: true
+
+# Decision output format
+output:
+  decisions:
+    - "ALLOW"
+    - "WARN"
+    - "BLOCK"
+  include_confidence: true
+  include_component_scores: true

@@ -1,0 +1,129 @@
+# Full Fusion Evaluation Config
+# Used by: python main.py --config config/full_fusion_eval.yaml --mode eval_system
+# Dataset: Pre-computed T_face/T_geo scores from simulation (data/geo/system_events.csv)
+
+experiment:
+  name: "fusion_full_system"
+  description: "Complete risk-aware vehicle authorization with adaptive face and probabilistic geofence"
+  seed: 21
+
+# Canonical dataset path — the ONLY place the path is defined
+data:
+  system_events_path: "data/geo/system_events.csv"
+
+# Face component configuration
+face:
+  model_dir: "results/face/adaptive"
+  model_name: "best_model.pt"
+  backbone: "resnet50"
+  embedding_dim: 512
+  adaptive_margin: true
+  quality_estimation: true
+
+# Geofence component configuration
+geofence:
+  model_dir: "results/geo/probabilistic"
+  model_name: "geo_model.pt"
+  model_type: "probabilistic"
+  architecture: "mlp"
+
+# Fusion configuration
+fusion:
+  mode: "learned"
+  model_dir: "results/fusion/fusion_training"
+  model_name: "fusion_model.pt"
+
+  rule_based:
+    alpha: 0.6
+    beta: 0.4
+    tau1: 0.3
+    tau2: 0.7
+
+    tune:
+      enabled: true
+      alpha_range: [0.4, 0.8]
+      beta_range: [0.2, 0.6]
+      tau1_range: [0.2, 0.5]
+      tau2_range: [0.5, 0.8]
+      steps: 10
+
+  learned:
+    architecture: "mlp"
+    hidden_dims: [32, 16]
+    dropout: 0.1
+    input_features:
+      - "T_face"
+      - "T_geo"
+      - "face_quality"
+      - "gps_accuracy"
+      - "time_of_day_sin"
+      - "time_of_day_cos"
+      - "speed"
+
+# Dataset split ratios
+dataset:
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+
+training:
+  batch_size: 128
+  epochs: 50
+  optimizer: "adam"
+  learning_rate: 0.001
+  weight_decay: 0.0001
+
+  loss: "bce"
+  class_weights: [1.0, 2.0]
+
+  scheduler:
+    type: "cosine"
+    T_max: 50
+    eta_min: 0.0001
+
+  early_stopping:
+    enabled: true
+    patience: 15
+    monitor: "val_f1"
+    mode: "max"
+
+evaluation:
+  seeds: [7, 21, 42]
+  metrics:
+    - "accuracy"
+    - "far"
+    - "frr"
+    - "eer"
+    - "auc"
+    - "f1"
+    - "tar_at_far_001"
+    - "tar_at_far_01"
+
+  latency:
+    enabled: true
+    measure_components: true
+    num_samples: 500
+
+  confusion_matrix:
+    enabled: true
+    normalized: true
+
+  data_integrity:
+    check_test_isolation: true
+    check_no_leakage: true
+
+logging:
+  log_interval: 50
+  log_trust_distributions: true
+  log_risk_distributions: true
+  log_decision_breakdown: true
+  tensorboard: false
+  wandb: false
+
+results:
+  dir: "results/fusion/full_system"
+  save_comparison_table: true
+  save_roc_curves: true
+  save_confusion_matrices: true
+  save_latency_report: true
+  save_attack_analysis: true

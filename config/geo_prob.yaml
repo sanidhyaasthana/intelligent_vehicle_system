@@ -1,0 +1,132 @@
+# Geofence Probabilistic Configuration
+# Learned probabilistic geofence model
+
+experiment:
+  name: "geo_probabilistic"
+  description: "Probabilistic geofence with learned trust model"
+  seed: 21
+
+model:
+  type: "probabilistic" 
+
+  # Probabilistic model architecture
+  architecture: "mlp"  # Options: logistic, mlp
+  hidden_dims: [64, 32]
+  dropout: 0.2
+  activation: "relu"
+  output_activation: "sigmoid"  # Outputs T_geo in [0, 1]
+
+  # Geofence definitions (same as baseline for consistency)
+  geofences:
+    - name: "home"
+      type: "circle"
+      center: [40.7128, -74.0060]
+      radius: 50
+    - name: "office"
+      type: "circle"
+      center: [40.7580, -73.9855]
+      radius: 100
+    - name: "parking"
+      type: "polygon"
+      vertices:
+        - [40.7500, -73.9900]
+        - [40.7510, -73.9900]
+        - [40.7510, -73.9890]
+        - [40.7500, -73.9890]
+
+data:
+  geo_data_file: "data/geo/location_data.csv"
+  home_lat: 40.7128
+  home_lon: -74.0060
+  boundary_distance: 100.0
+  geofences:
+    - name: "home"
+      lat: 40.7128
+      lon: -74.0060
+      radius: 50
+    - name: "office"
+      lat: 40.7580
+      lon: -73.9855
+      radius: 100
+    - name: "parking"
+      lat: 40.7505
+      lon: -73.9895
+      radius: 40
+
+dataset:
+  features:
+    - "lat"
+    - "lon"
+    - "distance_to_home"
+    - "distance_to_nearest_geofence"
+    - "time_of_day_sin"
+    - "time_of_day_cos"
+    - "gps_accuracy"
+    - "speed"
+    - "is_boundary_region"
+
+  normalize: true
+  normalization_method: "standard"  # Options: standard, minmax
+
+simulation:
+  enabled: true
+  num_train_samples: 10000
+  num_val_samples: 2000
+  num_test_samples: 2000
+
+  legitimate:
+    inside_ratio: 0.8
+    noise_std: 10
+    time_distribution: "normal"
+
+  attack:
+    outside_ratio: 0.6
+    boundary_ratio: 0.3
+    unusual_time_ratio: 0.1
+    distance_range: [100, 5000]
+
+training:
+  enabled: true
+  batch_size: 256
+  num_workers: 0
+  epochs: 100
+  optimizer: "adam"
+  learning_rate: 0.001
+  weight_decay: 0.0001
+
+  scheduler:
+    type: "reduce_on_plateau"
+    factor: 0.5
+    patience: 10
+    min_lr: 0.00001
+
+  loss: "bce"  # Binary cross-entropy
+  class_weights: [1.0, 1.0]  # [legitimate, attack]
+
+  early_stopping:
+    enabled: true
+    patience: 20
+    monitor: "val_auc"
+    mode: "max"
+
+evaluation:
+  threshold_search: true
+  threshold_range: [0.0, 1.0]
+  threshold_steps: 100
+  boundary_margin: 20
+
+  # Calibration
+  calibration:
+    enabled: true
+    method: "temperature_scaling"
+
+logging:
+  log_interval: 50
+  save_decisions: true
+  log_trust_distribution: true
+
+results:
+  dir: "results/geo/probabilistic"
+  save_confusion_matrix: true
+  save_roc_data: true
+  save_calibration_plot: true
