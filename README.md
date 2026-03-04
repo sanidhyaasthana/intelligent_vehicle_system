@@ -4,7 +4,7 @@ A multi-modal biometric fusion framework combining adaptive-margin face verifica
 
 
 Download the LFW dataset from:
-http://vis-www.cs.umass.edu/lfw/
+https://www.kaggle.com/datasets/jessicali9530/lfw-dataset
 
 Extract into:
 data/face/lfw-deepfunneled/
