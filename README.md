@@ -2,6 +2,15 @@
 
 A multi-modal biometric fusion framework combining adaptive-margin face verification, probabilistic geofencing, and score-level fusion for vehicle authorization.
 
+
+Download the LFW dataset from:
+http://vis-www.cs.umass.edu/lfw/
+
+Extract into:
+data/face/lfw-deepfunneled/
+
+
+
 ## Quick Start
 
 ```bash
