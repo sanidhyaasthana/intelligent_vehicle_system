@@ -1,5 +1,8 @@
 # Risk-Aware Vehicle Authorization Framework
 
+
+![System Architecture](docs/system_architecture.png)
+
 A multi-modal biometric fusion framework combining adaptive-margin face verification, probabilistic geofencing, and score-level fusion for vehicle authorization.
 
 
